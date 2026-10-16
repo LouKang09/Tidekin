@@ -238,6 +238,11 @@ function connect(){
    let msg;try{msg=JSON.parse(e.data);}catch{return;}
    if(ws!==state.ws)return;
    if(msg.type==="joined"){
+     if(msg.spawn&&state.game){
+       const player=state.game.me;
+       player.x=player.tx=msg.spawn.x;
+       player.y=player.ty=msg.spawn.y;
+     }
      if(msg.room?.code===state.room?.code){state.room=msg.room;state.game?.setRoom(state.room);updateTitle();fillRoomControls();buildPalette();}
      state.game?.setVisitors(msg.players);showPresence(msg.players);return;
    }
