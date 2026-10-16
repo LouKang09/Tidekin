@@ -51,12 +51,15 @@ function updateTitle(){
  $("#visitName").textContent=state.room.ownerName||"a neighbor";
  $("#decorateButton").disabled=!isOwner;
  $("#studioEditToggle").disabled=!isOwner;
- $("#editRoomName").value=state.room.name;
- $("#activitySelect").value=state.room.activity;
- $("#editNickname").value=state.me.name;
  $("#myRoomCode").textContent=state.me.roomCode;
  $("#worldTip").textContent=isOwner?(state.editing?"Long-press and drag furniture. Tap empty floor to place a piece.":"Your world, your pace. Tap to take a little walk."):"Have a look around — your host's furniture stays just as they left it.";
  $$("[data-nav=home]").forEach(b=>b.classList.toggle("active",isOwner));
+}
+function fillRoomControls(){
+ if(!state.me||!state.room)return;
+ $("#editRoomName").value=state.room.name||"";
+ $("#activitySelect").value=state.room.activity||"Relaxing";
+ $("#editNickname").value=state.me.name||"";
 }
 function painter(){
  if(!state.game){
@@ -86,7 +89,7 @@ function painter(){
  state.game.setRoom(state.room);
  $("#sceneLoading").hidden=true;
  showAvatarPreview();
- updateTitle();buildPalette();paintCatalog();
+ updateTitle();fillRoomControls();buildPalette();paintCatalog();
 }
 function showAvatarPreview(){
  const c=$("#avatarCanvas"),g=c.getContext("2d");g.clearRect(0,0,c.width,c.height);
@@ -230,12 +233,12 @@ function connect(){
    let msg;try{msg=JSON.parse(e.data);}catch{return;}
    if(ws!==state.ws)return;
    if(msg.type==="joined"){
-     if(msg.room?.code===state.room?.code){state.room=msg.room;state.game?.setRoom(state.room);updateTitle();buildPalette();}
+     if(msg.room?.code===state.room?.code){state.room=msg.room;state.game?.setRoom(state.room);updateTitle();fillRoomControls();buildPalette();}
      state.game?.setVisitors(msg.players);showPresence(msg.players);return;
    }
    if(msg.type==="presence"){state.game?.setVisitors(msg.players);showPresence(msg.players);return;}
    if(msg.type==="room-update"&&msg.room?.code===state.room?.code){
-     if(!owner()||!state.editing){state.room=msg.room;state.game?.setRoom(msg.room);updateTitle();buildPalette();}
+     if(!owner()||!state.editing){state.room=msg.room;state.game?.setRoom(msg.room);updateTitle();fillRoomControls();buildPalette();}
      return;
    }
    if(msg.type==="move"){state.game?.updatePosition(msg.id,msg.x,msg.y);return;}
@@ -263,7 +266,7 @@ async function joinRoom(code){
  if(code===ownCode()){goHome();return;}
  const data=await request("/api/rooms/"+encodeURIComponent(code),{token:null});
  state.room=data.room;state.visitCode=code;setEditing(false);state.game.setRoom(state.room);
- updateTitle();buildPalette();showPresence(data.players);
+ updateTitle();fillRoomControls();buildPalette();showPresence(data.players);
  history.replaceState(null,"",location.pathname+"?visit="+code);
  connect();allClosed();notify("Welcome to "+data.room.ownerName+"'s little nook ✿");
 }
@@ -271,7 +274,7 @@ function goHome(){
  if(!state.me||!state.game)return;
  if(state.room.code===ownCode()){hidePanel();return;}
  state.room=structuredClone(state.me.room);state.visitCode=null;state.game.setRoom(state.room);setEditing(false);
- updateTitle();buildPalette();history.replaceState(null,"",location.pathname);connect();
+ updateTitle();fillRoomControls();buildPalette();history.replaceState(null,"",location.pathname);connect();
  notify("You're back in your little nook ♡");
 }
 async function register(name){
