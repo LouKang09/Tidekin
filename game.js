@@ -5,6 +5,27 @@
 const C={blush:{wall:"#f9dee7",side:"#efd1e0",trim:"#e7b9cf"},cream:{wall:"#ffeedc",side:"#f3dfd0",trim:"#dfc8ba"},sage:{wall:"#d9ebe3",side:"#cee5d9",trim:"#aacdc3"},sky:{wall:"#dbebfa",side:"#cfdfed",trim:"#a6c9df"},lilac:{wall:"#eae1f9",side:"#ded2f1",trim:"#c6b5e6"}};
 const F={honey:["#efd9b7","#e6c9a3","#d7b88e"],birch:["#f4e8d8","#e9d9c8","#dbbdad"],walnut:["#c6a792","#b89480","#987260"],rose:["#efced1","#e3bbc5","#d6a4b4"]};
 const W=1000,H=650,n=9,TW=35,TH=17,OX=500,OY=180;
+const Sprites={
+ image:new Image(), ready:false, failed:false, columns:4, tileW:112, tileH:152,
+ draw(g,x,y,phase="idle",time=0,scale=1,facing=1){
+  if(!this.ready)return false;
+  const row=phase==="walk"?1:0;
+  const fps=phase==="walk"?8:3;
+  const frame=Math.floor(time/1000*fps)%4;
+  const w=112*scale,h=152*scale;
+  g.save();
+  g.translate(x,y);
+  if(facing<0)g.scale(-1,1);
+  // feet are located 83% down the tile; align them to the isometric floor
+  g.drawImage(this.image,frame*112,row*152,112,152,-w/2,-h*.83,w,h);
+  g.restore();
+  return true;
+ }
+};
+Sprites.image.onload=()=>{Sprites.ready=true;window.dispatchEvent(new Event("tidekin-sprites-loaded"));};
+Sprites.image.onerror=()=>{Sprites.failed=true;};
+Sprites.image.src="/assets/boy-sprite.webp?v=2";
+window.TidekinSprites=Sprites;
 const lighter=(hex,f=.22)=>{const v=parseInt(hex.slice(1),16);let r=(v>>16)&255,g=(v>>8)&255,b=v&255;return "rgb("+Math.round(r+(255-r)*f)+","+Math.round(g+(255-g)*f)+","+Math.round(b+(255-b)*f)+")";};
 const darker=(hex,f=.18)=>{const v=parseInt(hex.slice(1),16);return "rgb("+Math.round((v>>16&255)*(1-f))+","+Math.round((v>>8&255)*(1-f))+","+Math.round((v&255)*(1-f))+")";};
 const proj=(x,y,z=0)=>({x:OX+(x-y)*TW,y:OY+(x+y)*TH-z*40});
@@ -308,9 +329,13 @@ class TidekinGame{
     }
    }else{
     const person=o.kind==="me"?this.me:o.p,pp=proj(person.x,person.y);
-    const moving=Math.hypot((person.tx??person.x)-person.x,(person.ty??person.y)-person.y)>.04;
-    const bob=moving?t*.014:0;
-    drawAvatar(g,pp.x,pp.y,person.avatar,bob,person.id===this.me.id?.86:.79,0);
+    const bob=Math.sin(t*.012)*2;
+    const isOwner=person.id===this.me.id;
+    const moving=Math.hypot((person.tx??person.x)-person.x,(person.ty??person.y)-person.y)>.035;
+    if(moving && Math.abs((person.tx??person.x)-person.x)>.03)person.facing=(person.tx<person.x)?-1:1;
+    const avatarScale=isOwner?1.53:1.42;
+    if(!Sprites.draw(g,pp.x,pp.y,moving?"walk":"idle",t,avatarScale,person.facing||1))
+      drawAvatar(g,pp.x,pp.y,person.avatar,bob,isOwner?.86:.79,0);
     const w=Math.max(68,Math.min(124,(person.name||"Neighbor").length*7+23));
     round(g,pp.x-w/2,pp.y-146,w,25,12,"#fffdf4f0");
     g.fillStyle="#7b6b92";g.font="900 12px Nunito";g.textAlign="center";
