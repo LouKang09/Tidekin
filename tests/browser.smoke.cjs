@@ -23,6 +23,9 @@ async function port(){return new Promise((resolve,reject)=>{const s=net.createSe
   await page1.locator("#startButton").click();
   await page1.locator("#gameApp").waitFor({state:"visible",timeout:10000});
   await page1.locator("#sceneLoading").waitFor({state:"hidden",timeout:10000});
+  await page1.waitForFunction(()=>window.TidekinSprites?.ready===true,null,{timeout:10000});
+  const sprite=await page1.evaluate(()=>({width:window.TidekinSprites.image.naturalWidth,height:window.TidekinSprites.image.naturalHeight}));
+  assert.deepEqual(sprite,{width:112,height:304},"The new model-derived sprite asset should load at its exact dimensions");
   await pause(450);
   const canvasColors=await page1.evaluate(()=>{
    const c=document.querySelector("#worldCanvas"),ctx=c.getContext("2d");
