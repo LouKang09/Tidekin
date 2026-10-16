@@ -337,11 +337,12 @@ class TidekinGame{
     if(!Sprites.draw(g,pp.x,pp.y,moving?"walk":"idle",t,avatarScale,person.facing||1))
       drawAvatar(g,pp.x,pp.y,person.avatar,bob,isOwner?.86:.79,0);
     const w=Math.max(68,Math.min(124,(person.name||"Neighbor").length*7+23));
-    round(g,pp.x-w/2,pp.y-146,w,25,12,"#fffdf4f0");
+    const nameOffset=Sprites.ready?200:146;
+    round(g,pp.x-w/2,pp.y-nameOffset,w,25,12,"#fffdf4f0");
     g.fillStyle="#7b6b92";g.font="900 12px Nunito";g.textAlign="center";
-    g.fillText((person.name||"Neighbor").slice(0,18),pp.x,pp.y-130);
-    if(person.id===this.me.id)circ(g,pp.x+w/2-5,pp.y-140,4,"#88c8a7");
-    if(person.id!==this.me.id&&person.idle)circ(g,pp.x+w/2-5,pp.y-140,4,"#e5bca0");
+    g.fillText((person.name||"Neighbor").slice(0,18),pp.x,pp.y-nameOffset+16);
+    if(person.id===this.me.id)circ(g,pp.x+w/2-5,pp.y-nameOffset+6,4,"#88c8a7");
+    if(person.id!==this.me.id&&person.idle)circ(g,pp.x+w/2-5,pp.y-nameOffset+6,4,"#e5bca0");
     const wave=this.waveIds.get(person.id);
     if(wave&&t-wave<2200){
       const y=pp.y-181-((t-wave)/2200)*35;
