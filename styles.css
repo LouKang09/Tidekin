@@ -14,3 +14,5 @@
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
 
 .mobile-nav[hidden]{display:none!important}
+
+.character-preview-notice{margin:12px 0 22px;padding:15px 17px;color:#897a9f;background:#f6f1fd;border:1px solid #e9ddf4;border-radius:12px;font-size:11px;line-height:1.75}.character-legacy-customizer[hidden]{display:none!important}
