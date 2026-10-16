@@ -153,7 +153,7 @@ async function handler(req,res){
    if(patch.wallpaper!==undefined&&wallpapers.has(patch.wallpaper))room.wallpaper=patch.wallpaper;
    if(patch.floor!==undefined&&floors.has(patch.floor))room.floor=patch.floor;
    if(patch.activity!==undefined&&statuses.has(patch.activity))room.activity=patch.activity;
-   if(patch.furniture!==undefined)room.furniture=furnitureClean(patch.furniture);
+   if(patch.furniture!==undefined){try{room.furniture=furnitureClean(patch.furniture);}catch(err){return bad(res,400,err.message);}}
   }
   room.updatedAt=new Date().toISOString();persist();
   broadcast(room.code,{type:"room-update",room:roomSummary(room)});
