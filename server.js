@@ -109,8 +109,8 @@ function roomCode(){
   if(!db.rooms[code])return code;
  }throw Error("Could not generate room code");
 }
-const assets={"/":"index.html","/index.html":"index.html","/styles.css":"styles.css","/app.js":"app.js","/game.js":"game.js","/favicon.svg":"favicon.svg","/manifest.webmanifest":"manifest.webmanifest"};
-const mime={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"application/javascript; charset=utf-8",".svg":"image/svg+xml",".webmanifest":"application/manifest+json"};
+const assets={"/":"index.html","/index.html":"index.html","/styles.css":"styles.css","/app.js":"app.js","/game.js":"game.js","/favicon.svg":"favicon.svg","/manifest.webmanifest":"manifest.webmanifest","/assets/boy-sprite.webp":"boy-sprite.webp"};
+const mime={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"application/javascript; charset=utf-8",".svg":"image/svg+xml",".webmanifest":"application/manifest+json",".webp":"image/webp"};
 async function handler(req,res){
  res.setHeader("X-Frame-Options","DENY");res.setHeader("Referrer-Policy","strict-origin-when-cross-origin");
  res.setHeader("Permissions-Policy","camera=(),microphone=(),geolocation=()");
