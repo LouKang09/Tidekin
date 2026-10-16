@@ -6,18 +6,18 @@ const C={blush:{wall:"#f9dee7",side:"#efd1e0",trim:"#e7b9cf"},cream:{wall:"#ffee
 const F={honey:["#efd9b7","#e6c9a3","#d7b88e"],birch:["#f4e8d8","#e9d9c8","#dbbdad"],walnut:["#c6a792","#b89480","#987260"],rose:["#efced1","#e3bbc5","#d6a4b4"]};
 const W=1000,H=650,n=9,TW=35,TH=17,OX=500,OY=180;
 const Sprites={
- image:new Image(), ready:false, failed:false, columns:4, tileW:112, tileH:152,
+ image:new Image(), ready:false, failed:false, columns:1, tileW:112, tileH:152,
  draw(g,x,y,phase="idle",time=0,scale=1,facing=1){
   if(!this.ready)return false;
   const row=phase==="walk"?1:0;
-  const fps=phase==="walk"?8:3;
-  const frame=Math.floor(time/1000*fps)%4;
+  const frame=0; // First deployed preview: a real idle pose and an animated walk pose
+  const movementBob=phase==="walk"?Math.sin(time*.017)*2:Math.sin(time*.004)*.8;
   const w=112*scale,h=152*scale;
   g.save();
   g.translate(x,y);
   if(facing<0)g.scale(-1,1);
   // feet are located 83% down the tile; align them to the isometric floor
-  g.drawImage(this.image,frame*112,row*152,112,152,-w/2,-h*.83,w,h);
+  g.drawImage(this.image,0,row*152,112,152,-w/2,-h*.83+movementBob,w,h);
   g.restore();
   return true;
  }
