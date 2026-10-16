@@ -93,8 +93,13 @@ function painter(){
 }
 function showAvatarPreview(){
  const c=$("#avatarCanvas"),g=c.getContext("2d");g.clearRect(0,0,c.width,c.height);
- g.save();g.translate(130,245);TidekinDrawAvatar(g,0,0,state.me.avatar,0,1.47,1);g.restore();
+ if(window.TidekinSprites?.ready){
+   window.TidekinSprites.draw(g,130,222,"idle",0,1.49,1);
+ }else{
+   g.save();g.translate(130,245);TidekinDrawAvatar(g,0,0,state.me.avatar,0,1.47,1);g.restore();
+ }
 }
+window.addEventListener("tidekin-sprites-loaded",()=>{if(state.me)showAvatarPreview();});
 function changeAvatar(patch){
  state.me.avatar={...state.me.avatar,...patch};
  state.game?.setAvatar(state.me.avatar);
