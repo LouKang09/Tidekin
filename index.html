@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f9f6fb">
+<meta name="description" content="Tidekin — a little place of your own. Decorate, daydream and visit your favorite people in a cozy 2.5D illustrated world.">
+<meta property="og:title" content="Tidekin — Your little world, together">
+<meta property="og:description" content="Make a nook that feels like you. Share a room with your favorite people.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<script defer src="/game.js"></script>
+<script defer src="/app.js"></script>
+<title>Tidekin · My little world</title>
+</head>
+<body>
+<div id="loading" class="loading-screen"><div class="loading-cloud">☁</div><div class="loading-brand">tidekin<span>.</span></div><p>Making a little space for you…</p></div>
+<div id="onboarding" class="onboarding" hidden>
+  <div class="welcome-art">
+    <div class="orbit orbit1"></div><div class="orbit orbit2"></div>
+    <div class="welcome-house"><div class="house-roof"></div><div class="house-body"><span>♡</span><div class="house-door"></div></div></div>
+    <div class="welcome-star star1">✦</div><div class="welcome-star star2">✳</div><div class="welcome-star star3">✦</div>
+    <p>YOUR VERY OWN LITTLE WORLD</p>
+  </div>
+  <div class="welcome-form">
+    <a class="welcome-logo" href="/"><span class="logo-icon">~</span> tidekin<span class="brand-period">.</span></a>
+    <div class="welcome-kicker"><span></span> WELCOME TO YOUR NEW NOOK</div>
+    <h1>Small world.<br><em>Big feelings.</em></h1>
+    <p>Make yourself at home. Decorate your little corner of the world, create your own character and welcome your favorite people.</p>
+    <form id="startForm"><label for="startName">WHAT SHOULD WE CALL YOU?</label><input id="startName" name="name" minlength="2" maxlength="24" placeholder="Your nickname" autocomplete="nickname" required><button type="submit" class="primary-button" id="startButton">Make my little world <span>→</span></button><p id="startError" role="alert" class="error-message"></p></form>
+    <small>Early playable alpha · No password yet. Your room is saved to this browser, so please don't clear its data.</small>
+  </div>
+</div>
+<div id="gameApp" class="app-shell" hidden>
+  <aside class="left-rail">
+    <a href="/" class="sidebar-brand"><span class="logo-icon">~</span><span>tidekin<b>.</b></span></a>
+    <div class="rail-section-label">YOUR LITTLE UNIVERSE</div>
+    <nav class="main-menu" aria-label="Game navigation">
+      <button class="menu-item active" data-nav="home" title="My nook"><span class="menu-icon">⌂</span><span>My nook</span><i></i></button>
+      <button class="menu-item" data-nav="visit" title="Visit a friend"><span class="menu-icon">♡</span><span>Visit a friend</span><i></i></button>
+      <button class="menu-item" data-nav="seaside" title="Seaside preview"><span class="menu-icon">≋</span><span>Seaside</span><span class="coming-tag">SOON</span></button>
+    </nav>
+    <div class="rail-section-label rail-secondary-label">MY LITTLE SPACE</div>
+    <nav class="main-menu" aria-label="Room tools">
+      <button class="menu-item" data-nav="decorate"><span class="menu-icon">✧</span><span>Decorate</span></button>
+      <button class="menu-item" data-nav="avatar"><span class="menu-icon">☺</span><span>My avatar</span></button>
+      <button class="menu-item" data-nav="settings"><span class="menu-icon">⚙</span><span>Room settings</span></button>
+    </nav>
+    <div class="rail-bottom">
+      <div class="sidebar-illustration"><div class="sidebar-sun">☀</div><div class="hills hill-back"></div><div class="hills hill-front"></div><span>There's no place<br>like your little place.</span></div>
+      <button id="railIdentity" class="identity-card"><span class="identity-avatar" id="railAvatar">☺</span><span><strong id="railName">Neighbor</strong><small><i class="online-dot"></i> Your little nook</small></span><span class="identity-chevron">›</span></button>
+    </div>
+  </aside>
+  <div class="center-column">
+    <header class="topbar">
+      <div class="crumbs"><span class="bread-icon">✿</span><span>My little world</span><span class="crumb-slash">/</span><strong id="crumbRoom">My nook</strong></div>
+      <div class="topbar-right">
+        <div class="weather-pill"><span>☀</span> A lovely day</div>
+        <button class="share-top" id="topInvite" type="button"><span>♡</span> Invite a friend</button>
+        <button class="top-mini-avatar" id="topProfile" aria-label="Open profile">☺</button>
+      </div>
+    </header>
+    <main class="main-body">
+      <section class="intro-row"><div><span class="intro-kicker"><span class="tiny-spark">✧</span> YOUR OWN CORNER OF THE WORLD</span><h1 id="mainHeading">Welcome home, neighbor <span>✿</span></h1><p id="mainSubheading">A place to slow down, make memories, and simply be.</p></div><div class="visitor-chip"><span class="visitor-circles">♡</span><div><strong id="visitCount">Just you for now</strong><small id="presenceSubtitle">Your room is ready for friends</small></div></div></section>
+      <section class="world-card" aria-label="Tidekin interactive 2.5D home">
+        <div class="world-top">
+          <div class="scene-label"><span class="scene-status-dot"></span><div><strong id="roomTitle">My little nook</strong><small id="roomMeta">PERSONAL SPACE · 2.5D</small></div></div>
+          <div class="scene-top-actions">
+            <div class="room-pill">✧ <span id="roomMood">Relaxing</span></div>
+            <button class="scene-icon-button" id="saveSnapshot" title="Save a picture of your room" aria-label="Save room image">↧</button>
+            <button class="scene-icon-button" id="openSettings" title="Room settings" aria-label="Room settings">⚙</button>
+          </div>
+        </div>
+        <div class="canvas-stage" id="canvasStage">
+          <canvas id="worldCanvas" width="1000" height="650" aria-label="Interactive isometric room. Tap floor to walk. Turn on decorate mode to move furniture."></canvas>
+          <div class="stage-cloud c1">✧</div><div class="stage-cloud c2">✳</div>
+          <div class="stage-hint" id="stageHint">👆 Tap anywhere on the floor to wander</div>
+          <div id="visitBanner" class="visit-banner" hidden><span>♡</span><span>You're visiting <strong id="visitName">a neighbor</strong></span><button id="returnHome" type="button">Go home ↗</button></div>
+          <div class="scene-loading" id="sceneLoading"><span>✿</span> Getting your nook ready…</div>
+        </div>
+        <div class="scene-bottom">
+          <div class="world-tip"><span class="tip-flower">✿</span><span id="worldTip">Your world, your pace. Tap to take a little walk.</span></div>
+          <div class="scene-buttons"><button id="waveButton" class="world-action" title="Wave at friends">⌁ <span>Wave</span></button><button id="decorateButton" class="world-action primary">✧ <span>Decorate</span></button></div>
+        </div>
+      </section>
+      <section class="below-cards">
+        <div class="mini-card note-card"><div class="mini-card-icon">✉</div><div><div class="mini-kicker">A NOTE FROM TIDEKIN</div><h3>Good things grow in little places.</h3><p>Give your space a personal touch, then invite someone to stop by.</p></div><button id="quickInvite" aria-label="Invite friend">↗</button></div>
+        <div class="mini-card journey-card"><div class="mini-card-icon wave-icon">≋</div><div><div class="mini-kicker">COMING IN A FUTURE CHAPTER</div><h3>Beyond the shore</h3><p>One day, we'll drift through the sea and share letters in bottles.</p></div><button id="shorePreview" aria-label="See seaside preview">↗</button></div>
+      </section>
+      <footer class="footer-note">made with ♡ for your little corner of the world <span>tidekin · alpha 0.1</span></footer>
+    </main>
+  </div>
+  <aside class="studio-panel" id="studioPanel" aria-label="Personalization studio">
+    <div class="studio-header"><div><span class="studio-eyebrow">LITTLE THINGS, BIG PERSONALITY</span><h2>Make it <em>yours.</em></h2></div><span class="studio-flower">✿</span></div>
+    <div class="studio-tabs" role="tablist" aria-label="Editor sections"><button data-tab="avatar" class="active" role="tab" aria-selected="true">Avatar</button><button data-tab="decor" role="tab" aria-selected="false">Decor</button><button data-tab="room" role="tab" aria-selected="false">Room</button></div>
+    <div class="studio-scroll">
+      <section data-studio="avatar" class="studio-section"><div class="avatar-preview"><div class="avatar-preview-halo"></div><canvas id="avatarCanvas" width="260" height="270" aria-label="Your customized avatar"></canvas><span>YOU, BUT EXTRA CUTE ✨</span></div>
+        <div class="editor-label"><span>HAIRSTYLE</span><small>Pick your favorite look</small></div><div id="hairStyles" class="hair-styles"></div>
+        <div class="editor-label"><span>SKIN TONE</span></div><div id="skinSwatches" class="swatch-row"></div>
+        <div class="editor-label"><span>HAIR COLOR</span></div><div id="hairSwatches" class="swatch-row"></div>
+        <div class="editor-label"><span>YOUR OUTFIT</span></div><div id="outfitSwatches" class="swatch-row"></div>
+      </section>
+      <section data-studio="decor" class="studio-section" hidden>
+        <p class="studio-explanation">Turn on decorate mode, choose a piece and tap the room to place it. Drag existing furniture to move it around.</p>
+        <button id="studioEditToggle" class="editing-toggle">✧ Start decorating <span>→</span></button>
+        <div class="editor-label"><span>FURNITURE COLLECTION</span><small>Choose a piece to place</small></div>
+        <div id="furnitureCatalog" class="furniture-catalog"></div>
+        <div id="selectedFurniture" class="selection-panel" hidden><div><span>SELECTED PIECE</span><strong id="selectedFurnitureName">Furniture</strong></div><div><button id="rotateFurniture">↻ Rotate</button><button id="removeFurniture" class="delete">Remove</button></div></div>
+        <p class="studio-footnote">Your furniture saves automatically. Visitors can enjoy your room, but only you can decorate it.</p>
+      </section>
+      <section data-studio="room" class="studio-section" hidden>
+        <label class="text-control">ROOM NAME<input id="editRoomName" maxlength="38" placeholder="My lovely nook"></label>
+        <div class="editor-label"><span>WALL COLORS</span><small>Set the mood</small></div><div id="wallSwatches" class="theme-swatches"></div>
+        <div class="editor-label"><span>FLOOR TONES</span></div><div id="floorSwatches" class="theme-swatches"></div>
+        <div class="editor-label"><span>WHAT ARE YOU UP TO?</span></div><select id="activitySelect"><option>Relaxing</option><option>Studying</option><option>Sleeping</option><option>Creating</option><option>Daydreaming</option></select>
+        <label class="text-control personal-name">YOUR NICKNAME<input id="editNickname" maxlength="24" minlength="2" placeholder="Nickname"></label>
+        <button class="save-room-button" id="saveRoomButton">Save room changes <span>→</span></button>
+        <div class="security-notice">✿ This alpha uses a guest key saved in your browser, not an email login. Save your invite link, and avoid clearing browser data.</div>
+      </section>
+    </div>
+    <div class="studio-bottom"><div class="saving-indicator"><span id="saveDot"></span><span id="saveLabel">Everything feels just right</span></div><button id="manualSave" title="Save my changes" aria-label="Save changes">↻</button></div>
+  </aside>
+</div>
+<nav id="mobileNav" class="mobile-nav" hidden aria-label="Mobile game navigation"><button data-mobile="home" class="active"><span>⌂</span>Home</button><button data-mobile="decor"><span>✧</span>Decor</button><button data-mobile="visit"><span>♡</span>Visit</button><button data-mobile="avatar"><span>☺</span>Avatar</button></nav>
+<div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+<div id="friendsSheet" class="bottom-sheet" hidden role="dialog" aria-label="Visit friends"><div class="sheet-handle"></div><button class="sheet-close" data-close-sheet aria-label="Close">×</button><span class="sheet-eyebrow">THE NEIGHBORHOOD</span><h2>A little closer,<br><em>even from far away.</em></h2><p>Share your nook to let someone come visit. Or enter a friend's room code to stop by theirs.</p>
+ <div class="invite-box"><span>MY ROOM CODE</span><div><strong id="myRoomCode">XXXXXXX</strong><button id="copyRoomCode">Copy</button></div></div><button class="sheet-primary" id="copyInviteLink">♡ Copy my invite link <span>↗</span></button>
+ <form id="visitForm" class="visit-form"><label for="visitCode">VISIT SOMEONE'S NOOK</label><div><input id="visitCode" maxlength="16" placeholder="Their 7-character room code" autocapitalize="characters" autocomplete="off"><button type="submit">Visit →</button></div><p id="visitError" class="error-message" role="status"></p></form>
+ <div class="privacy-blurb">✧ Rooms are accessible to anyone with the code or invite link during this alpha. Formal friends-only privacy controls come later.</div>
+</div>
+<div id="seasideSheet" class="bottom-sheet" hidden role="dialog" aria-label="Seaside coming soon"><div class="sheet-handle"></div><button class="sheet-close" data-close-sheet aria-label="Close">×</button><div class="ocean-illustration"><div class="moon">☾</div><div class="boat-hull">⛵</div><div class="ocean-waves">≈ ≋ ≈ ≋ ≈</div></div><span class="sheet-eyebrow">OUR NEXT CHAPTER</span><h2>Somewhere,<br><em>beyond the shore.</em></h2><p>Boat rides, secret messages in bottles, and memories floating between strangers are planned for a future version. For now, your little nook is waiting for you.</p><button class="sheet-primary" data-close-sheet>Back to my nook <span>♡</span></button></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body></html>
