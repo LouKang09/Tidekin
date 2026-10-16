@@ -97,11 +97,14 @@
     <div class="studio-header"><div><span class="studio-eyebrow">LITTLE THINGS, BIG PERSONALITY</span><h2>Make it <em>yours.</em></h2></div><span class="studio-flower">✿</span></div>
     <div class="studio-tabs" role="tablist" aria-label="Editor sections"><button data-tab="avatar" class="active" role="tab" aria-selected="true">Avatar</button><button data-tab="decor" role="tab" aria-selected="false">Decor</button><button data-tab="room" role="tab" aria-selected="false">Room</button></div>
     <div class="studio-scroll">
-      <section data-studio="avatar" class="studio-section"><div class="avatar-preview"><div class="avatar-preview-halo"></div><canvas id="avatarCanvas" width="260" height="270" aria-label="Your customized avatar"></canvas><span>YOU, BUT EXTRA CUTE ✨</span></div>
+      <section data-studio="avatar" class="studio-section"><div class="avatar-preview"><div class="avatar-preview-halo"></div><canvas id="avatarCanvas" width="260" height="270" aria-label="Your customized avatar"></canvas><span>NEW CHARACTER PREVIEW ✨</span></div>
+        <p class="character-preview-notice">Meet our upgraded character from your uploaded model. Idle and walking now use animated 2D sprites. This preview uses one fixed outfit and hairstyle; full customization returns when matching sprite sets are ready.</p>
+        <div class="character-legacy-customizer" hidden>
         <div class="editor-label"><span>HAIRSTYLE</span><small>Pick your favorite look</small></div><div id="hairStyles" class="hair-styles"></div>
         <div class="editor-label"><span>SKIN TONE</span></div><div id="skinSwatches" class="swatch-row"></div>
         <div class="editor-label"><span>HAIR COLOR</span></div><div id="hairSwatches" class="swatch-row"></div>
         <div class="editor-label"><span>YOUR OUTFIT</span></div><div id="outfitSwatches" class="swatch-row"></div>
+        </div>
       </section>
       <section data-studio="decor" class="studio-section" hidden>
         <p class="studio-explanation">Turn on decorate mode, choose a piece and tap the room to place it. Drag existing furniture to move it around.</p>
