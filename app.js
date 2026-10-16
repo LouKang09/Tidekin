@@ -113,12 +113,12 @@ function buildPalette(){
    for(const color of A[key])paintSwatch(holder,color,state.me.avatar[key],c=>changeAvatar({[key]:c}),key+" "+color);
  }
  const wall=$("#wallSwatches");wall.replaceChildren();
- for(const [id,color] of Object.entries(fonts))paintSwatch(wall,color,state.room.wallpaper,id2=>{
+ for(const [id,color] of Object.entries(fonts))paintSwatch(wall,color,fonts[state.room.wallpaper],()=>{
    if(!owner())return notify("Only the room owner can change the walls.");
    state.room.wallpaper=id;state.game.setRoom(state.room);buildPalette();scheduleSave();
  },names[id]);
  const floor=$("#floorSwatches");floor.replaceChildren();
- for(const [id,color] of Object.entries(foot))paintSwatch(floor,color,state.room.floor,()=>{
+ for(const [id,color] of Object.entries(foot))paintSwatch(floor,color,foot[state.room.floor],()=>{
    if(!owner())return notify("Only the room owner can change the floor.");
    state.room.floor=id;state.game.setRoom(state.room);buildPalette();scheduleSave();
  },id+" floor");
@@ -157,6 +157,7 @@ function saveNow(){
  if(!state.me||!state.token)return Promise.resolve();
  clearTimeout(state.saveTimer);
  const version=state.revision;
+ if(owner())state.me.room=structuredClone(state.room);
  const patch={name:state.me.name,avatar:structuredClone(state.me.avatar)};
  if(owner()){
   patch.room={name:state.room.name,wallpaper:state.room.wallpaper,floor:state.room.floor,
@@ -166,6 +167,7 @@ function saveNow(){
    try{
     const result=await request("/api/me",{method:"PUT",data:patch});
     state.me.name=result.name;state.me.avatar=result.avatar;
+    if(owner()&&result.room)state.me.room=structuredClone(result.room);
     if(version===state.revision)setSaved("saved","All your little changes are safe ♡");
    }catch(err){
     setSaved("error","Couldn't save — tap ↻ to retry");
@@ -279,6 +281,7 @@ async function register(name){
 }
 async function startGame(){
  $("#loading").hidden=true;$("#onboarding").hidden=true;$("#gameApp").hidden=false;
+ $("#mobileNav").hidden=false;
  state.room=structuredClone(state.me.room);
  painter();connect();
  const visit=new URLSearchParams(location.search).get("visit");
