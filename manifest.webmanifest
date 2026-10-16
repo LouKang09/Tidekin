@@ -1,0 +1,17 @@
+{
+  "name": "Tidekin — Your Little World",
+  "short_name": "Tidekin",
+  "description": "Cozy little rooms, shared with favorite people",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7fb",
+  "theme_color": "#8b75ca",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
