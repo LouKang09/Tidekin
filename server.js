@@ -186,9 +186,14 @@ wss.on("connection",ws=>{
   if(message.type==="join"){
    const p=identity(String(message.token||"")),code=maxClean(message.code,8).toUpperCase();
    if(!p||!db.rooms[code])return send(ws,{type:"error",message:"Unable to join room"});
-   const previous=ws.roomCode;ws.playerId=p.id;ws.roomCode=code;ws.x=5;ws.y=5.6;ws.idle=false;
+   // Keep each new arrival at a distinct, open floor spot instead of stacking avatars.
+   const spawnSlots=[[3.1,7.45],[7.25,6.65],[2.8,4.0],[7.4,4.5],[5.1,7.85],[4.0,2.8]];
+   const existing=[...clients].filter(other=>other!==ws&&other.roomCode===code&&other.readyState===WebSocket.OPEN);
+   const free=spawnSlots.find(([x,y])=>existing.every(other=>Math.hypot(x-other.x,y-other.y)>2.2));
+   const spawn=free||spawnSlots[existing.length%spawnSlots.length];
+   const previous=ws.roomCode;ws.playerId=p.id;ws.roomCode=code;ws.x=spawn[0];ws.y=spawn[1];ws.idle=false;
    if(previous&&previous!==code)syncPresence(previous);
-   send(ws,{type:"joined",room:roomSummary(db.rooms[code]),players:occupants(code),you:p.id});
+   send(ws,{type:"joined",room:roomSummary(db.rooms[code]),players:occupants(code),you:p.id,spawn:{x:ws.x,y:ws.y}});
    syncPresence(code);return;
   }
   if(!ws.playerId||!ws.roomCode)return;
