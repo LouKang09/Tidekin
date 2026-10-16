@@ -36,7 +36,10 @@ async function port(){return new Promise((resolve,reject)=>{const s=net.createSe
   await page1.locator("#editRoomName").fill("Sunset Nook");
   await page1.locator("#activitySelect").selectOption("Studying");
   await page1.locator("#saveRoomButton").click();
-  await page1.waitForFunction(()=>document.querySelector("#saveLabel").textContent.includes("safe"),{timeout:10000});
+  await page1.waitForFunction(()=>document.querySelector("#saveLabel").textContent.includes("safe"),null,{timeout:10000});
+  const beforeReload=(await page1.request.get(origin+"/api/rooms/"+code)).json();
+  const savedRoom=await beforeReload;
+  process.stdout.write("Room before reload: "+JSON.stringify({name:savedRoom.room.name,activity:savedRoom.room.activity})+"\\n");
   await page1.reload({waitUntil:"domcontentloaded"});
   await page1.locator("#gameApp").waitFor({state:"visible"});
   await page1.locator("#sceneLoading").waitFor({state:"hidden"});
