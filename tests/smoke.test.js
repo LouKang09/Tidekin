@@ -65,13 +65,16 @@ test("Tidekin guest rooms, validation, furniture persistence and live visits",{t
    await new Promise((resolve,reject)=>{ws1.once("open",resolve);ws1.once("error",reject);});
    const joined1=untilMessage(ws1,m=>m.type==="joined");
    ws1.send(JSON.stringify({type:"join",token:owner.token,code:owner.roomCode}));
-   assert.equal((await joined1).you,owner.id);
+   const j1=await joined1;
+   assert.equal(j1.you,owner.id);
+   assert.ok(j1.spawn&&Number.isFinite(j1.spawn.x)&&Number.isFinite(j1.spawn.y),"Join should return our spawn position");
    const ws2=makeSocket();
    await new Promise((resolve,reject)=>{ws2.once("open",resolve);ws2.once("error",reject);});
    const joined2=untilMessage(ws2,m=>m.type==="joined");
    ws2.send(JSON.stringify({type:"join",token:visitor.token,code:owner.roomCode}));
    const j2=await joined2;assert.equal(j2.room.code,owner.roomCode);
    assert.equal(j2.players.length,2);
+   assert.ok(Math.hypot(j1.spawn.x-j2.spawn.x,j1.spawn.y-j2.spawn.y)>2.2,"Two visitors must not spawn on top of one another");
    const move=untilMessage(ws1,m=>m.type==="move"&&m.id===visitor.id);
    ws2.send(JSON.stringify({type:"move",x:6.4,y:5.6}));
    assert.equal((await move).x,6.4);
