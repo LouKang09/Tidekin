@@ -39,3 +39,9 @@ The renderer uses Canvas 2D with procedural illustrations, not 3D models. Camera
 - Security: same-origin validation, server-side action whitelists, strict editing ownership checks, input validation, rate limiting.
 
 Copyright 2026 Tidekin contributors. Original game concept.
+
+## Animated character v0.2 preview
+
+The player/visitor character renderer now supports a baked WebP sprite atlas at `/assets/boy-sprite.webp` (112 × 152 tiles, four frames each for idle and walking). The game continues to use **Canvas 2D, not a 3D engine**. The atlas is rendered offline from the owner-supplied GLB model and FBX animations. It contains one fixed outfit/hairstyle: the older procedural customization options are temporarily hidden to avoid displaying changes that the model cannot represent. The renderer falls back to the original Canvas avatar if this asset is unavailable. Additional running/sitting sprite frames are available in the conversion pack and can be integrated in a later version.
+
+**Asset rights:** Before publicly distributing this model or sprite atlas, verify that the original asset license permits this use. The model itself is intentionally not committed to this repository.
